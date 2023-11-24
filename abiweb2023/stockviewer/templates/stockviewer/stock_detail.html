@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<div class="container-lg">
+    <div class="row">
+        <h1 class="display-2 text-secondary">Stock Viewer</h1>
+        <p class="display-5">{{symbol}}</p>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+
+                <div class="card-body">
+                  <p class="card-text display-4 text-center text-primary">{{last_price.close}}</p>
+                  <p class="card-text text-center">{{last_price.date|date:"D m/d/Y"}}</p>
+
+                </div>
+              </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+
+                <div class="card-body">
+                  <p class="card-text display-4 text-center">00.00</p>
+                  <p class="card-text text-center">50 Day MA</p>
+
+                </div>
+              </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+
+                <div class="card-body">
+                  <p class="card-text display-4 text-center">00.00</p>
+                  <p class="card-text text-center">200 Day MA</p>
+
+                </div>
+              </div>
+        </div>
+    </div>
+    <!-- {{dates}} -->
+    <div class="row">
+    <div id="container">
+        <canvas id="pie-chart"></canvas>
+      </div>
+    
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.0/Chart.bundle.min.js"></script>
+
+
+<div class="row">
+<div id="container2">
+<canvas id="myChart"></canvas>
+      <script>
+            var labels = [];
+                    {% for d in dates %}
+                    labels.push(new Date("{{ d }}"));
+                    {% endfor %}
+            var config2 = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                label: "Price History",
+                data: {{closes}} ,
+                borderColor: '#23b8a6',
+                backgroundColor: '#2ce8d2',
+                color: 'red'
+
+                }]
+            },
+            options: {
+                scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                    displayFormats: {
+                        'millisecond': 'MMM DD',
+                        'second': 'MMM DD',
+                        'minute': 'MMM DD',
+                        'hour': 'MMM DD',
+                        'day': 'MMM DD',
+                        'week': 'MMM DD',
+                        'month': 'MMM DD',
+                        'quarter': 'MMM DD',
+                        'year': 'MMM DD',
+                    }
+                    }
+                }],
+                },
+            }
+            };
+            window.onload = function() {
+            var ctx2 = document.getElementById("myChart").getContext("2d");
+            new Chart(ctx2, config2);
+            }
+      </script>
+</div>
+</div>
+{% endblock %}

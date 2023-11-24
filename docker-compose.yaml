@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: dbsto
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 8091:5432
+  load-db:
+    build : ./data_assets/load-db
+    depends_on:
+      - db
+    volumes:
+      - ./data_assets/load-db:/load-db
+    command: bash -c "python /load-db/load-db.py"
+  app:
+    build: ./abiweb2023
+    depends_on:
+      - db
+    volumes:
+    - ./abiweb2023:/app
+    ports:
+      - 3000:3000
